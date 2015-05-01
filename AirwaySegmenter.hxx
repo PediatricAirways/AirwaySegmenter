@@ -56,6 +56,7 @@
 #include "FastMarchIt.hxx"
 #include "LabelIt.hxx"
 #include "ProgramArguments.h"
+#include "AirwayWriteArgs.h"
 
 namespace AirwaySegmenter {
 
@@ -70,6 +71,9 @@ namespace AirwaySegmenter {
                itk::SmartPointer< TInput > & resampledInput,
                typename TInput::PixelType & airwayThreshold )
   {
+    if (args.argsFile != "None"){
+      WriteArgsToFile(args);
+    }
     /* Typedefs */
     typedef float                      TFloatType;
     typedef typename TInput::PixelType T;
@@ -536,6 +540,13 @@ namespace AirwaySegmenter {
     DEBUG_WRITE_LABEL_IMAGE( maskedOtsu );
 
     airwayThreshold = dThreshold;
+
+    if (args.bWriteThreshold) {
+      std::ofstream thresholdFile;
+
+      thresholdFile.open(args.sThresholdFolder.c_str());
+      thresholdFile << airwayThreshold;
+    }
 
     /***************************************************************/
     /*
