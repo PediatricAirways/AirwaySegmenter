@@ -544,7 +544,7 @@ namespace AirwaySegmenter {
     if (args.bWriteThreshold) {
       std::ofstream thresholdFile;
 
-      thresholdFile.open(args.sThresholdFolder.c_str());
+      thresholdFile.open(args.sThresholdFile.c_str());
       thresholdFile << airwayThreshold;
     }
 

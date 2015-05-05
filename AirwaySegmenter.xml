@@ -264,14 +264,14 @@
             <longflag>--threshold</longflag>
             <label>Write Threshold Value</label>
             <default>false</default>
-            <description><![CDATA[Output the image in RAI coordinates. If the input image is not in RAI coordinates, then it will be resampled. This output is the resampled image.]]></description>
+            <description><![CDATA[If true, write the threshold as ASCII text to the file specified by the threshold destination file.]]></description>
         </boolean>
         <string>
-            <name>sThresholdFolder</name>
-            <longflag>--thresholdFolder</longflag>
-            <label>Destination folder for threshold value</label>
+            <name>sThresholdFile</name>
+            <longflag>--thresholdFile</longflag>
+            <label>Destination file for threshold value</label>
             <default>None</default>
-            <description><![CDATA[Used only if Debug on. Choose the destination folder of the output debug images.]]></description>
+            <description><![CDATA[Used only if Write Threshold Value is on. Choose the destination file for the output threshold file.]]></description>
         </string>
     </parameters>
     <parameters advanced="true">
