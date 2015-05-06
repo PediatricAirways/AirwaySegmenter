@@ -8,18 +8,10 @@ file( MAKE_DIRECTORY ${TEST_OUTPUT_DIR} )
 add_executable( AirwaySegmenterTestDriver AirwaySegmenterTestDriver.cxx )
 target_link_libraries( AirwaySegmenterTestDriver ${ITK_LIBRARIES} )
 
-get_property( AIRWAY_SEGMENTER_LOCATION
-  TARGET AirwaySegmenter
-  PROPERTY LOCATION
-)
-string( REPLACE "$(OutDir)" "Release" AIRWAY_SEGMENTER_LOCATION_RELEASE
-  ${AIRWAY_SEGMENTER_LOCATION}
-)
-
 add_test( NAME SegmentationTest_1003
           CONFIGURATIONS Release
           COMMAND AirwaySegmenterTestDriver
-            "${AIRWAY_SEGMENTER_LOCATION_RELEASE}"
+            $<TARGET_FILE:AirwaySegmenter>
             --lowerSeed 15.2148,163.774,-50.7766
             --upperSeed 34.5117,267.316,67.2616
             --debug

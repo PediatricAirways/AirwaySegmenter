@@ -2,7 +2,7 @@
 
 namespace AirwaySegmenter {
 
-  void WriteArgsToFile( const ProgramArguments & args )
+  void AIRWAYSEGMENTERCORE_EXPORT WriteArgsToFile( const ProgramArguments & args )
   {
     std::ofstream argsFile;
 

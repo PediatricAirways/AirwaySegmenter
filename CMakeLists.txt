@@ -5,6 +5,9 @@ endif()
 
 project(AirwaySegmenter)
 
+# Needed for DLLs on Windows
+include( GenerateExportHeader )
+
 # Find packages
 find_package(ITK 4 REQUIRED)
 include(${ITK_USE_FILE})
@@ -18,6 +21,7 @@ find_package(VTK REQUIRED)
 vtk_module_config(ADDITIONAL_VTK vtkIOXML)
 include(${VTK_USE_FILE})
 
+option( BUILD_SHARED_LIBS "Build libraries in shared mode." OFF )
 option( SUPPORT_UCHAR_PIXEL "Build with support for input images with unsigned char pixels." OFF )
 option( SUPPORT_CHAR_PIXEL "Build with support for input images with char pixels." OFF )
 option( SUPPORT_USHORT_PIXEL "Build with support for input images with unsigned short pixels." ON )
@@ -48,12 +52,13 @@ set( AirwaySegmenterCoreLib_SRCS
 )
 
 add_library( AirwaySegmenterCore ${AirwaySegmenterCoreLib_SRCS} )
+generate_export_header( AirwaySegmenterCore
+   EXPORT_FILE_NAME AirwaySegmenterCore_Export.h )
 target_link_libraries(AirwaySegmenterCore 
   ${ITK_LIBRARIES}
   ${VTK_LIBRARIES}
   ${ADDITIONAL_VTK_LIBRARIES}
 )
-set(CMAKE_SHARED_LINKER_FLAGS -DDLL_EXPORT)
 
 #Finally the projects
 SEMMacroBuildCLI(

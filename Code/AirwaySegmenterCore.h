@@ -16,27 +16,24 @@
 //  Authors: Marc Niethammer, Yi Hong, Johan Andruejol, Cory Quammen
 =============================================================================*/
 
+#if defined(_WIN32)
+#pragma warning( disable : 4996 )
+#endif
+
+#include "AirwaySegmenterCore_Export.h"
+
 #include <string>
 
 #include <itkImageIOBase.h>
 
-#ifdef _WIN32
-#ifdef DLL_EXPORT
-#define CORE_EXPORT __declspec(dllexport)
-#else
-#define CORE_EXPORT __declspec(dllimport)
-#endif // DLL_EXPORT
-#else // _WIN32
-#define CORE_EXPORT
-#endif // _WIN32
 
 namespace AirwaySegmenter {
 
   /*******************************************************************/
   /** Query the image type. */
   /*******************************************************************/
-  void CORE_EXPORT GetImageType ( std::string fileName,
-                                  itk::ImageIOBase::IOPixelType & pixelType,
-                                  itk::ImageIOBase::IOComponentType & componentType);
+  void AIRWAYSEGMENTERCORE_EXPORT GetImageType ( std::string fileName,
+                                                 itk::ImageIOBase::IOPixelType & pixelType,
+                                                 itk::ImageIOBase::IOComponentType & componentType);
 
 } // end namespace AirwaySegmenter
