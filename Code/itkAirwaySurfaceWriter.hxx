@@ -354,7 +354,7 @@ AirwaySurfaceWriter<TInputImage, TMaskImage>
   toVTKFilter->Update();
 
   //Apply VTK Filter
-  vtkSmartPointer<vtkContourFilter> contourFilter = vtkContourFilter::New();
+  vtkSmartPointer<vtkContourFilter> contourFilter = vtkSmartPointer<vtkContourFilter>::New();
 #if VTK_MAJOR_VERSION <= 5
   contourFilter->SetInput(toVTKFilter->GetOutput());
 #else
@@ -381,11 +381,11 @@ AirwaySurfaceWriter<TInputImage, TMaskImage>
 
   //Transform it to IJK (i.e. pixel space)
   // <-> equivalent to a rotation of 180 degrees around the Z axis
-  vtkSmartPointer<vtkTransform> transform = vtkTransform::New();
+  vtkSmartPointer<vtkTransform> transform = vtkSmartPointer<vtkTransform>::New();
   transform->RotateZ(180.0);
 
   vtkSmartPointer<vtkTransformPolyDataFilter> transformer =
-    vtkTransformPolyDataFilter::New();
+    vtkSmartPointer<vtkTransformPolyDataFilter>::New();
   //transformer->SetInputConnection(connectivityFilter->GetOutputPort());
   //transformer->SetInputConnection(smoothFilter->GetOutputPort());
   transformer->SetInputConnection(contourFilter->GetOutputPort());
@@ -393,7 +393,7 @@ AirwaySurfaceWriter<TInputImage, TMaskImage>
   transformer->Update();
 
   //Write to file
-  vtkSmartPointer<vtkXMLPolyDataWriter> writer = vtkXMLPolyDataWriter::New();
+  vtkSmartPointer<vtkXMLPolyDataWriter> writer = vtkSmartPointer<vtkXMLPolyDataWriter>::New();
   writer->SetFileName(this->m_FileName.c_str());
 
   writer->SetInputConnection(transformer->GetOutputPort());
