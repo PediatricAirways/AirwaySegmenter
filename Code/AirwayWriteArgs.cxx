@@ -64,10 +64,6 @@ namespace AirwaySegmenter {
     }
     
     argsFile << " --noWarning";
-    if(args.bRAIImage){
-      argsFile << " --RAIImage";
-      // argsFile << " --RAIImagePath " << args.sRAIImagePath; // This is added in the python script
-    }
 
     argsFile.close();
   }

@@ -107,9 +107,6 @@ namespace
     std::cout << "sThresholdFile               = " << sThresholdFile << std::endl;
 
     std::cout << "----------------------------------------------------------------------------------" << std::endl;
-    std::cout << "bRAIImage                    = " << bRAIImage << std::endl;
-    std::cout << "sRAIImagePath                = " << sRAIImagePath << std::endl;
-    std::cout << "----------------------------------------------------------------------------------" << std::endl;
     std::cout << "argsFile                     = " << argsFile << std::endl;
     std::cout << "----------------------------------------------------------------------------------" << std::endl;
     return 0;
@@ -159,9 +156,6 @@ int main( int argc, char * argv[] )
   args.bNoWarning   = bNoWarning;
   args.bDebug       = bDebug;
   args.sDebugFolder = sDebugFolder;
-
-  args.bRAIImage     = bRAIImage;
-  args.sRAIImagePath = sRAIImagePath;
 
   args.bWriteThreshold = bWriteThreshold;
   args.sThresholdFile  = sThresholdFile;

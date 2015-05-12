@@ -63,9 +63,6 @@ public:
   bool        bDebug;
   std::string sDebugFolder;
 
-  bool        bRAIImage;
-  std::string sRAIImagePath;
-
   bool        bWriteThreshold;
   std::string sThresholdFile;
 };
