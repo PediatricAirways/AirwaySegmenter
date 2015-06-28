@@ -316,7 +316,7 @@ namespace AirwaySegmenter {
     DEBUG_WRITE_LABEL_IMAGE( absoluteValueDifferenceFilterMasked );
 
     /* Clean up any small islands left in the image. */
-    typedef itk::BinaryBallStructuringElement<LabelImageType::PixelType,
+    typedef itk::BinaryBallStructuringElement<typename LabelImageType::PixelType,
                                               LabelImageType::ImageDimension>
               StructuringElementType;
     StructuringElementType structuringElement;
