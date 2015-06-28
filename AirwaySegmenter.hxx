@@ -23,6 +23,7 @@
 /* ITK includes */
 #include <itkAbsoluteValueDifferenceImageFilter.h>
 #include <itkAddImageFilter.h>
+#include <itkBinaryMorphologicalOpeningImageFilter.h>
 #include <itkBinaryThresholdImageFilter.h>
 #include <itkConnectedComponentImageFilter.h>
 #include <itkConnectedThresholdImageFilter.h>
@@ -314,6 +315,24 @@ namespace AirwaySegmenter {
     TRY_UPDATE( absoluteValueDifferenceFilterMasked );
     DEBUG_WRITE_LABEL_IMAGE( absoluteValueDifferenceFilterMasked );
 
+    /* Clean up any small islands left in the image. */
+    typedef itk::BinaryBallStructuringElement<LabelImageType::PixelType,
+                                              LabelImageType::ImageDimension>
+              StructuringElementType;
+    StructuringElementType structuringElement;
+    structuringElement.SetRadius(1);
+    structuringElement.CreateStructuringElement();
+
+    typedef typename itk::BinaryMorphologicalOpeningImageFilter<
+                        LabelImageType, LabelImageType, StructuringElementType > OpeningFilterType;
+    typename OpeningFilterType::Pointer openingFilter = OpeningFilterType::New();
+    openingFilter->SetInput( absoluteValueDifferenceFilterMasked->GetOutput() );
+    openingFilter->SetKernel( structuringElement );
+    openingFilter->SetBackgroundValue( 0 );
+    openingFilter->SetForegroundValue( 1 );
+    TRY_UPDATE( openingFilter );
+    DEBUG_WRITE_LABEL_IMAGE( openingFilter );
+
     /* Extract largest component of the difference */
     if (args.bDebug) {
       std::cout << "Extracting largest connected component ... ";
@@ -323,7 +342,8 @@ namespace AirwaySegmenter {
     typename RelabelComponentType::Pointer relabel = RelabelComponentType::New();
     typename FinalThresholdingFilterType::Pointer largestComponentThreshold = FinalThresholdingFilterType::New();
 
-    connected->SetInput ( absoluteValueDifferenceFilterMasked->GetOutput());
+    //connected->SetInput ( absoluteValueDifferenceFilterMasked->GetOutput());
+    connected->SetInput( openingFilter->GetOutput() );
     TRY_UPDATE( connected );
     DEBUG_WRITE_LABEL_IMAGE( connected );
 
@@ -426,10 +446,19 @@ namespace AirwaySegmenter {
     DEBUG_WRITE_LABEL_IMAGE( maskedOtsuThresholdFilter );
     T dThreshold = maskedOtsuThresholdFilter->GetThreshold();
 
+    /* Clean up small islands. */
+    typename OpeningFilterType::Pointer openingFilterMasked = OpeningFilterType::New();
+    openingFilterMasked->SetInput( maskedOtsuThresholdFilter->GetOutput() );
+    openingFilterMasked->SetKernel( structuringElement );
+    openingFilterMasked->SetBackgroundValue( 0 );
+    openingFilterMasked->SetForegroundValue( 1 );
+    TRY_UPDATE( openingFilterMasked );
+    DEBUG_WRITE_LABEL_IMAGE( openingFilterMasked );
+
     // Masked Otsu filter above does a whole-image thresholding, so mask it here
     // by the bounds of the patient.
     typename TMaskImageFilter::Pointer maskedOtsu = TMaskImageFilter::New();
-    maskedOtsu->SetInput1( maskedOtsuThresholdFilter->GetOutput() );
+    maskedOtsu->SetInput1( openingFilterMasked->GetOutput() );
     maskedOtsu->SetInput2( thresholdDifference->GetOutput() ); // Second input is the  mask
     TRY_UPDATE( maskedOtsu );
     DEBUG_WRITE_LABEL_IMAGE( maskedOtsu );
