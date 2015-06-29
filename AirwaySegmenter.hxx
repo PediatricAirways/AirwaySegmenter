@@ -342,8 +342,8 @@ namespace AirwaySegmenter {
     typename RelabelComponentType::Pointer relabel = RelabelComponentType::New();
     typename FinalThresholdingFilterType::Pointer largestComponentThreshold = FinalThresholdingFilterType::New();
 
-    //connected->SetInput ( absoluteValueDifferenceFilterMasked->GetOutput());
-    connected->SetInput( openingFilter->GetOutput() );
+    connected->SetInput ( absoluteValueDifferenceFilterMasked->GetOutput());
+    //connected->SetInput( openingFilter->GetOutput() );
     TRY_UPDATE( connected );
     DEBUG_WRITE_LABEL_IMAGE( connected );
 
@@ -458,7 +458,8 @@ namespace AirwaySegmenter {
     // Masked Otsu filter above does a whole-image thresholding, so mask it here
     // by the bounds of the patient.
     typename TMaskImageFilter::Pointer maskedOtsu = TMaskImageFilter::New();
-    maskedOtsu->SetInput1( openingFilterMasked->GetOutput() );
+    //maskedOtsu->SetInput1( openingFilterMasked->GetOutput() );
+    maskedOtsu->SetInput1( maskedOtsuThresholdFilter->GetOutput() );
     maskedOtsu->SetInput2( thresholdDifference->GetOutput() ); // Second input is the  mask
     TRY_UPDATE( maskedOtsu );
     DEBUG_WRITE_LABEL_IMAGE( maskedOtsu );
